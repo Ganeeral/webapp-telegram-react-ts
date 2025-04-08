@@ -1,35 +1,42 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useEffect, useState } from "react";
+import "./App.css";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const tg = window.Telegram.WebApp;
+  const user = tg.initDataUnsafe?.user;
+
+  const [theme] = useState<"light" | "dark">(tg.colorScheme);
+
+  useEffect(() => {
+    tg.ready();
+    tg.expand();
+
+    tg.MainButton.setText("🚀 Продолжить");
+    tg.MainButton.show();
+
+    tg.MainButton.onClick(() => {
+      alert("Кнопка нажата! Можно отправить данные или перейти дальше.");
+    });
+  }, []);
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
+    <div className={`app ${theme}`}>
+      <h1>Привет, {user?.first_name || "гость"} 👋</h1>
+      <p>Вы запустили мини-приложение в Telegram!</p>
+
       <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
         <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
+          <strong>ID:</strong> {user?.id}
+        </p>
+        <p>
+          <strong>Имя:</strong> {user?.first_name} {user?.last_name}
+        </p>
+        <p>
+          <strong>Юзернейм:</strong> @{user?.username}
         </p>
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    </div>
+  );
 }
 
-export default App
+export default App;
