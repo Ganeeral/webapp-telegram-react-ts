@@ -14,10 +14,26 @@ function App() {
     tg.MainButton.setText("🚀 Продолжить");
     tg.MainButton.show();
 
+    console.log("TG:", tg);
+    console.log("USER:", user);
+
     tg.MainButton.onClick(() => {
-      alert("Кнопка нажата! Можно отправить данные или перейти дальше.");
+      alert("Кнопка нажата!");
     });
   }, []);
+
+  if (!user) {
+    return (
+      <p>
+        Не удалось получить данные пользователя. Запустите мини-аппу из
+        Telegram.
+      </p>
+    );
+  }
+
+  if (!window.Telegram?.WebApp) {
+    return <p>WebApp API не доступен</p>;
+  }
 
   return (
     <div className={`app ${theme}`}>
