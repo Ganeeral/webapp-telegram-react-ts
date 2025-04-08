@@ -1,56 +1,28 @@
-import { useEffect, useState } from "react";
-import "./App.css";
+import { useEffect } from "react";
+import WebApp from "@twa-dev/sdk";
 
 function App() {
-  const tg = window.Telegram.WebApp;
-  const user = tg.initDataUnsafe?.user;
-
-  const [theme] = useState<"light" | "dark">(tg.colorScheme);
+  const user = WebApp.initDataUnsafe?.user;
 
   useEffect(() => {
-    tg.ready();
-    tg.expand();
+    WebApp.ready();
+    WebApp.expand();
 
-    tg.MainButton.setText("🚀 Продолжить");
-    tg.MainButton.show();
+    WebApp.MainButton.setText("🚀 Продолжить");
+    WebApp.MainButton.show();
 
-    console.log("TG:", tg);
-    console.log("USER:", user);
-
-    tg.MainButton.onClick(() => {
+    WebApp.MainButton.onClick(() => {
       alert("Кнопка нажата!");
     });
   }, []);
 
   if (!user) {
-    return (
-      <p>
-        Не удалось получить данные пользователя. Запустите мини-аппу из
-        Telegram.
-      </p>
-    );
-  }
-
-  if (!window.Telegram?.WebApp) {
-    return <p>WebApp API не доступен</p>;
+    return <p>Запусти мини-аппу из Telegram</p>;
   }
 
   return (
-    <div className={`app ${theme}`}>
-      <h1>Привет, {user?.first_name || "гость"} 👋</h1>
-      <p>Вы запустили мини-приложение в Telegram!</p>
-
-      <div className="card">
-        <p>
-          <strong>ID:</strong> {user?.id}
-        </p>
-        <p>
-          <strong>Имя:</strong> {user?.first_name} {user?.last_name}
-        </p>
-        <p>
-          <strong>Юзернейм:</strong> @{user?.username}
-        </p>
-      </div>
+    <div>
+      <h1>Привет, {user.first_name}</h1>
     </div>
   );
 }
